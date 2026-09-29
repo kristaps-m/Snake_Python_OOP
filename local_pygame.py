@@ -10,7 +10,7 @@ class TheGame:
         self.cell_size = 20
         self.screen = pygame.display.set_mode((self.w + self.add_w_for_menu, self.h))
         self.clock = pygame.time.Clock()
-        self.snake = Snake(self.screen, 20, 80, 20)
+        self.snake = Snake(self.screen, 100, 20, 20)
 
     def play_game(self):
         while self.running:
@@ -38,8 +38,9 @@ class TheGame:
             self.screen.fill("black")
 
             """ ------ > RENDER YOUR GAME HERE""" 
-            self.snake.draw_line("yellow", (10, 10), (200,200))
+            # self.snake.draw_line("yellow", (10, 10), (200,200))
             self.snake.snake_head_update()
+            self.snake.draw_snake_tail()
             self.snake.snake_head_draw()
 
             pygame.display.flip()
