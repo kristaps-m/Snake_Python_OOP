@@ -8,12 +8,21 @@ class Snake:
         self.snake_head_x = head_x
         self.snake_head_y = head_y
         self.cell_size = cell_size
+        self.direction = "a" # n a s w -> up, right, down, left
 
     def draw_line(self, color, start_pos, end_pos):
         pygame.draw.line(self.surface, color, start_pos, end_pos)
 
     def snake_head_update(self):
-        self.snake_head_x += self.cell_size
+        if self.direction == "a":
+            self.snake_head_x += self.cell_size
+        elif self.direction == "w":
+            self.snake_head_x -= self.cell_size
+        elif self.direction == "n":
+            self.snake_head_y -= self.cell_size
+        elif self.direction == "s":
+            self.snake_head_y += self.cell_size
+
 
     def snake_head_draw(self):
         pygame.draw.rect(self.surface,

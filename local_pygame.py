@@ -24,10 +24,15 @@ class TheGame:
 
 
                 # Keyboard events:
-                # if event.type == pygame.KEYUP:
-                    # if event.key == pygame.K_F11:
-                    #     print("K F11 pressed")
-
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_s:
+                        self.snake.direction = "s"
+                    elif event.key == pygame.K_w:
+                        self.snake.direction = "n"
+                    elif event.key == pygame.K_a:
+                        self.snake.direction = "w"
+                    elif event.key == pygame.K_d:
+                        self.snake.direction = "a"
 
             # fill the screen with a color to wipe away anything from last frame
             self.screen.fill("black")
