@@ -26,12 +26,10 @@ class Food:
             new_y = random.randint(1, self.h // self.cell_size) * self.cell_size - self.cell_size
         self.x = new_x
         self.y = new_y
-        print(f"f : {self.x} - {self.y}")
 
 
     def is_generated_food_in_snake(self, new_x, new_y, snake):
         all_snake = snake.tail
-        all_snake.append((snake.snake_head_x, snake.snake_head_y))
         
         for t in all_snake:
             if t[0] == new_x and t[1] == new_y:
