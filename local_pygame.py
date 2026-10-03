@@ -5,6 +5,7 @@ from food import Food
 from grid import Grid
 
 NEW_GAME_Y_POSITION = 110
+SOUND_BTN_Y_POSITION = 200
 VERSION_NUMBER_STRING = "v 1.0.0"
 
 class TheGame:
@@ -26,8 +27,10 @@ class TheGame:
         self.grid = Grid(self.w, self.h, self.cell_size, self.screen)
         self.sound = mixer.Sound("sounds/njam-[AudioTrimmer.com]_2.ogg")
         self.new_game_button = self.snake.p_rect(self.w + 50, NEW_GAME_Y_POSITION, 200, 40)
+        self.sound_toggle_btn = self.snake.p_rect(self.w + 50, SOUND_BTN_Y_POSITION, 200, 40)
         self.is_mouse_on_ngb = False # ngb = new game button
         self.has_player_made_movement = False
+        self.is_sound_on = True
 
 
     def play_game(self):
@@ -53,7 +56,9 @@ class TheGame:
                 # collision with mouse for new game buuton
                 if event.type == pygame.MOUSEBUTTONUP:
                     if self.new_game_button.collidepoint(mouse_pos):
-                        self.new_game() 
+                        self.new_game()
+                    if self.sound_toggle_btn.collidepoint(mouse_pos):
+                        self.is_sound_on = not self.is_sound_on 
 
             # fill the screen with a color to wipe away anything from last frame
             self.screen.fill("black")
@@ -133,13 +138,17 @@ class TheGame:
 
     def draw_right_side_menu_features(self):
         self.render_text(50, "SNAKE GAME!", "white", self.w + 50, 10)
-        # poins (1) -> new game (2) -> pause (3)
+        # poins (1) -> new game (2) -> pause (3) -> sound on/off (4)
         self.render_text(50, f"points: {len(self.snake.tail)}", "red", self.w + 50, 60) # 1
         
         pygame.draw.rect(self.screen, "brown" if not self.is_mouse_on_ngb else "red", self.new_game_button) # 2
         self.render_text(40, "NEW GAME", "white", self.w + 50 + 20, NEW_GAME_Y_POSITION + 9) # 2
         
         self.render_text(50, f"PAUSE? {'YES' if self.pause else 'NO' }", "white", self.w + 50, 160) # 3
+
+        pygame.draw.rect(self.screen, "darkblue", self.sound_toggle_btn) # 4
+        self.render_text(40, f"Sound {'On' if self.is_sound_on else 'off'}", "white", self.w + 50 + 20, SOUND_BTN_Y_POSITION + 9) # 4
+
 
     def movement_and_pause_keyboard_check(self, event):
         if not self.has_player_made_movement:
@@ -167,7 +176,8 @@ class TheGame:
         if self.is_game_over():
             self.is_game_over_bool = True 
         if self.snake.snake_head_x == self.food.x and self.snake.snake_head_y == self.food.y:
-            self.sound.play()
+            if self.is_sound_on:
+                self.sound.play()
             # If snake head matches foods precise x and y position we make tail longer and generate new food
             self.snake.tail.append((self.food.x, self.food.y))
             self.food.generate_new_food(self.snake)
