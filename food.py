@@ -7,8 +7,8 @@ class Food:
         self.cell_size = cell_size
         self.w = w
         self.h = h
-        self.x = cell_size * 4 #random.randint()
-        self.y = cell_size * 2 #random.randint()
+        self.x = cell_size * 4
+        self.y = cell_size * 2
 
     def draw(self):
         pygame.draw.rect(self.surface,

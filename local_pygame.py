@@ -3,20 +3,18 @@ from pygame import mixer
 from snake import Snake
 from food import Food
 from grid import Grid
+from constants import *
 
-NEW_GAME_Y_POSITION = 110
-SOUND_BTN_Y_POSITION = 200
-VERSION_NUMBER_STRING = "v 1.0.0"
 
 class TheGame:
     def __init__(self):
         pygame.init()
         mixer.init()
         self.running = True
-        self.w = 600
-        self.h = 600
-        self.add_w_for_menu = 360
-        self.cell_size = 20
+        self.w = W
+        self.h = H
+        self.add_w_for_menu = ADD_W_FOR_MENU
+        self.cell_size = CELL_SIZE
         self.pause = False
         self.is_game_over_bool = False
         self.is_game_won_bool = False # Is grid full so that new food can not be placed

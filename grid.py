@@ -1,6 +1,5 @@
 import pygame
-
-GRID_LINE_COLOR = "#2F2F2F"
+from constants import *
 
 class Grid:
     def __init__(self, w, h, cell_size, surface):
