@@ -1,6 +1,7 @@
 import pygame
 from snake import Snake
 from food import Food
+from grid import Grid
 
 NEW_GAME_Y_POSITION = 110
 VERSION_NUMBER_STRING = "v 1.0.0"
@@ -18,6 +19,7 @@ class TheGame:
         self.clock = pygame.time.Clock()
         self.snake = Snake(self.screen, 100, 20, 20)
         self.food = Food(self.screen, self.cell_size, self.w, self.h)
+        self.grid = Grid(self.w, self.h, self.cell_size, self.screen)
         self.new_game_button = self.snake.p_rect(self.w + 50, NEW_GAME_Y_POSITION, 200, 40)
         self.is_mouse_on_ngb = False # ngb = new game button
         self.is_game_over_bool = False
@@ -52,7 +54,9 @@ class TheGame:
             # fill the screen with a color to wipe away anything from last frame
             self.screen.fill("black")
 
-            """ ------ > RENDER YOUR GAME HERE""" 
+            """ ------ > RENDER YOUR GAME HERE"""
+            self.grid.draw_grid_on_game_field()
+
             if not self.pause:
                 self.update_and_draw_game_objects()
             else:
