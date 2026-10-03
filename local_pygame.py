@@ -21,6 +21,7 @@ class TheGame:
         self.new_game_button = self.snake.p_rect(self.w + 50, NEW_GAME_Y_POSITION, 200, 40)
         self.is_mouse_on_ngb = False # ngb = new game button
         self.is_game_over_bool = False
+        self.has_player_made_movement = False
 
 
     def play_game(self):
@@ -71,6 +72,8 @@ class TheGame:
             # version text :D
             self.render_text(19, VERSION_NUMBER_STRING, "white", self.w + self.add_w_for_menu - 50, self.h - 18)
 
+            self.has_player_made_movement = False # This variable prevents player from cheat in movement
+
             pygame.display.flip()
 
             self.clock.tick(6)  # limits FPS to 60
@@ -118,15 +121,20 @@ class TheGame:
         self.render_text(50, f"PAUSE? {'YES' if self.pause else 'NO' }", "white", self.w + 50, 160) # 3
 
     def movement_and_pause_keyboard_check(self, event):
-        if event.key == pygame.K_s and self.snake.direction != "n":
-            self.snake.direction = "s"
-        elif event.key == pygame.K_w and self.snake.direction != "s":
-            self.snake.direction = "n"
-        elif event.key == pygame.K_a and self.snake.direction != "a":
-            self.snake.direction = "w"
-        elif event.key == pygame.K_d and self.snake.direction != "w":
-            self.snake.direction = "a"
-        elif (event.key == pygame.K_p or event.key == pygame.K_SPACE) and self.is_game_over_bool == False:
+        if not self.has_player_made_movement:
+            if event.key == pygame.K_s and self.snake.direction != "n":
+                self.snake.direction = "s"
+                self.has_player_made_movement = True
+            elif event.key == pygame.K_w and self.snake.direction != "s":
+                self.snake.direction = "n"
+                self.has_player_made_movement = True
+            elif event.key == pygame.K_a and self.snake.direction != "a":
+                self.snake.direction = "w"
+                self.has_player_made_movement = True
+            elif event.key == pygame.K_d and self.snake.direction != "w":
+                self.snake.direction = "a"
+                self.has_player_made_movement = True
+        if (event.key == pygame.K_p or event.key == pygame.K_SPACE) and self.is_game_over_bool == False:
             self.pause = not self.pause
 
     
