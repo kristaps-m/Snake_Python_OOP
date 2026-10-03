@@ -31,9 +31,8 @@ class Snake:
 
     def snake_head_draw(self):
         pygame.draw.rect(self.surface,
-                          "#93f59d",
+                          "#54fc62",
                            self.p_rect(self.snake_head_x, self.snake_head_y, self.cell_size, self.cell_size),
-                           width=2
                         )
 
     def draw_snake_tail(self):

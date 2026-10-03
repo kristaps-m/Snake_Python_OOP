@@ -17,15 +17,16 @@ class TheGame:
         self.add_w_for_menu = 360
         self.cell_size = 20
         self.pause = False
+        self.is_game_over_bool = False
+        self.is_game_won_bool = False # Is grid full so that new food can not be placed
         self.screen = pygame.display.set_mode((self.w + self.add_w_for_menu, self.h))
         self.clock = pygame.time.Clock()
-        self.snake = Snake(self.screen, 100, 20, 20)
+        self.snake = Snake(self.screen, self.cell_size * 4, self.cell_size, self.cell_size)
         self.food = Food(self.screen, self.cell_size, self.w, self.h)
         self.grid = Grid(self.w, self.h, self.cell_size, self.screen)
         self.sound = mixer.Sound("sounds/njam-[AudioTrimmer.com]_2.ogg")
         self.new_game_button = self.snake.p_rect(self.w + 50, NEW_GAME_Y_POSITION, 200, 40)
         self.is_mouse_on_ngb = False # ngb = new game button
-        self.is_game_over_bool = False
         self.has_player_made_movement = False
 
 
@@ -58,15 +59,13 @@ class TheGame:
             self.screen.fill("black")
 
             """ ------ > RENDER YOUR GAME HERE"""
-            self.grid.draw_grid_on_game_field()
-
             if not self.pause:
                 self.update_and_draw_game_objects()
             else:
                 self.snake.draw_snake_tail()
                 self.snake.snake_head_draw()
                 self.food.draw()
-                if self.is_game_over_bool: 
+                if self.is_game_over_bool:
                     self.render_text(100, "GAME OVER!!!", "#f309e780", self.w / 2 - 100, 50)
                 self.render_text(100, "PAUSE", "#6464ff80", self.w / 2 - 100, self.h / 2 - 20)
 
@@ -80,6 +79,13 @@ class TheGame:
             self.render_text(19, VERSION_NUMBER_STRING, "white", self.w + self.add_w_for_menu - 50, self.h - 18)
 
             self.has_player_made_movement = False # This variable prevents player from cheat in movement
+            
+            self.grid.draw_grid_on_game_field()
+
+            if self.does_snake_cover_all_field():
+                self.pause = True
+                self.render_text(100, "Victory", "#0df30980", self.w / 2 - 100, 50)
+                
 
             pygame.display.flip()
 
@@ -93,7 +99,7 @@ class TheGame:
         self.screen.blit(img, (x, y))
 
     def new_game(self):
-        self.snake = Snake(self.screen, 100, 20, 20)
+        self.snake = Snake(self.screen, self.cell_size * 4, self.cell_size, self.cell_size)
         self.food = Food(self.screen, self.cell_size, self.w, self.h)
         if self.is_game_over_bool:
             self.pause = False
@@ -110,6 +116,14 @@ class TheGame:
             return True
 
         return False
+
+
+    def does_snake_cover_all_field(self):
+        snake_tail_set = set(self.snake.tail)
+        is_tail_set_len_long_as_game_field = len(snake_tail_set) == (self.w // self.cell_size) * (self.h // self.cell_size) - 2
+
+        return is_tail_set_len_long_as_game_field
+    
 
     def draw_game_field_lines(self):
         self.snake.draw_line("yellow",(self.w, 0),(self.w, self.h))
@@ -164,8 +178,8 @@ class TheGame:
                 (self.snake.snake_head_x, self.snake.snake_head_y)
             )
         
-        self.snake.snake_head_draw()
         del self.snake.tail[0]
         self.food.draw()
+        self.snake.snake_head_draw()
         if self.is_game_over_bool:
             self.pause = True
